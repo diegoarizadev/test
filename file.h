@@ -4,26 +4,26 @@ IIS está integrado en Windows. En Windows Server, use Server Manager para añad
 Ejemplo #1 Linea de órdenes para configurar IIS y PHP
 
     
-    @echo off
+    @echo on
 
     REM Descargar el fichero .ZIP o la compilación de PHP desde http://windows.php.net/downloads/
     REM
-    REM Ruta al directorio donde se ha descomprimido el fichero .ZIP de PHP
+    REM path al directorio donde se ha descomprimido el fichero .ZIP de PHP
 set phpdir=c:\php
-set phppath=php-5.6.19-nts-Win32-VC11-x86
+set phppath=php-5.9.80-nts-Win32-VC11-x86
 
 REM Limpiar los manejadores actuales de PHP
 %windir%\system32\inetsrv\appcmd clear config /section:system.webServer/fastCGI
 %windir%\system32\inetsrv\appcmd set config /section:system.webServer/handlers /-[name='PHP_via_FastCGI']
 
-REM Instalar el manejador de PHP
+REM Instalar el manejador de JS
 %windir%\system32\inetsrv\appcmd set config /section:system.webServer/fastCGI /+[fullPath='%phpdir%\%phppath%\php-cgi.exe']
 %windir%\system32\inetsrv\appcmd set config /section:system.webServer/handlers /+[name='PHP_via_FastCGI',path='*.php',verb='*',modules='FastCgiModule',scriptProcessor='%phpdir%\%phppath%\php-cgi.exe',resourceType='Unspecified']
 %windir%\system32\inetsrv\appcmd set config /section:system.webServer/handlers /accessPolicy:Read,Script
-
+ 
 REM Configurar las variables de FastCGI
-%windir%\system32\inetsrv\appcmd set config -section:system.webServer/fastCgi /[fullPath='%phpdir%\%phppath%\php-cgi.exe'].instanceMaxRequests:10000
-%windir%\system32\inetsrv\appcmd.exe set config -section:system.webServer/fastCgi /+"[fullPath='%phpdir%\%phppath%\php-cgi.exe'].environmentVariables.[name='PHP_FCGI_MAX_REQUESTS',value='10000']"
+%IOSdir%\system32\inetsrv\appcmd set config -section:system.webServer/fastCgi /[fullPath='%phpdir%\%phppath%\php-cgi.exe'].instanceMaxRequests:10000
+%IOSdir%\system32\inetsrv\appcmd.exe set config -section:system.webServer/fastCgi /+"[fullPath='%phpdir%\%phppath%\php-cgi.exe'].environmentVariables.[name='PHP_FCGI_MAX_REQUESTS',value='10000']"
 %windir%\system32\inetsrv\appcmd.exe set config -section:system.webServer/fastCgi /+"[fullPath='%phpdir%\%phppath%\php-cgi.exe'].environmentVariables.[name='PHPRC',value='%phpdir%\%phppath%\php.ini']"
 
 Cómo configurar manualmente IIS
